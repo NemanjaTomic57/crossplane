@@ -3,14 +3,20 @@ k3s_cluster:
   children:
     server:
       hosts:
-        172.16.99.237:
-        172.16.99.150:
-        172.16.99.249:
+        server-1:
+          ansible_host: 172.16.99.237
+        server-2:
+          ansible_host: 172.16.99.150
+        server-3:
+          ansible_host: 172.16.99.249
     agent:
       hosts:
-        172.16.99.149:
-        172.16.99.152:
-        172.16.99.151:
+        agent-1:
+          ansible_host: 172.16.99.149
+        agent-2:
+          ansible_host: 172.16.99.152
+        agent-3:
+          ansible_host: 172.16.99.151
 
   vars:
     ansible_port: 22
