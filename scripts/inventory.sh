@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-inventory="$(dirname "$0")/../ansible/inventory.yml"
+inventory="$(dirname "$0")/../ansible/inventory.yaml"
 
 octets=""
 for i in {1..6}; do

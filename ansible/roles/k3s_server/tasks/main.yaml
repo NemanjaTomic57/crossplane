@@ -1,0 +1,35 @@
+---
+- name: Create K3s configuration directory
+  ansible.builtin.file:
+    path: /etc/rancher/k3s
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Copy K3s configuration
+  ansible.builtin.copy:
+    src: config.yaml
+    dest: /etc/rancher/k3s/config.yaml
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Restart K3s
+
+- name: Install K3s systemd service
+  ansible.builtin.copy:
+    src: k3s.service
+    dest: /etc/systemd/system/k3s.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload systemd
+    - Restart K3s
+
+- name: Enable and start K3s
+  ansible.builtin.systemd:
+    name: k3s
+    enabled: true
+    state: started
+    daemon_reload: true

@@ -1,0 +1,36 @@
+---
+- name: Configure firewalld for Kubernetes
+  block:
+    - name: Allow Kubernetes API server
+      ansible.posix.firewalld:
+        port: 6443/tcp
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: Trust Kubernetes pod network
+      ansible.posix.firewalld:
+        zone: trusted
+        source: 10.42.0.0/16
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: Trust Kubernetes service network
+      ansible.posix.firewalld:
+        zone: trusted
+        source: 10.43.0.0/16
+        permanent: true
+        state: enabled
+        immediate: true
+
+- name: Set unique hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Download K3s binary
+  ansible.builtin.get_url:
+    url: https://github.com/k3s-io/k3s/releases/download/v1.37.2%2Bk3s1/k3s
+    dest: /usr/bin/k3s
+    mode: "0755"
+    checksum: sha256:265b3ee6a3198ef14033c63ef46cbb32370d83795199fb6d1b01f21575eddbda
